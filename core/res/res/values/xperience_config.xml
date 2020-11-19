@@ -38,4 +38,7 @@
     <bool name="config_dt2sGestureAvailable">true</bool>
     <bool name="config_dt2sGestureEnabledByDefault">true</bool>
 
+    <!-- Whether Pixel props is enabled -->
+    <bool name="config_enablePixelProps">true</bool>
+
 </resources>
