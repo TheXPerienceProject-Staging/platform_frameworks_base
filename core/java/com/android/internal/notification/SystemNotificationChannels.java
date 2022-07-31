@@ -219,6 +219,8 @@ public class SystemNotificationChannels {
                 NotificationManager.IMPORTANCE_LOW);
         channelsList.add(abusiveBackgroundAppsChannel);
 
+        extraChannels(context, channelsList);
+
         nm.createNotificationChannels(channelsList);
     }
 
@@ -261,5 +263,15 @@ public class SystemNotificationChannels {
         channel(ctx, MISSING_PERMISSION,
                     R.string.notification_channel_missing_permission,
                     NotificationManager.IMPORTANCE_HIGH, true, dest);
+    }
+
+    private static NotificationChannel channel(Context ctx, String id, int nameRes, int importance, boolean silent, List<NotificationChannel> dest) {
+        var c = new NotificationChannel(id, ctx.getText(nameRes), importance);
+        if (silent) {
+            c.setSound(null, null);
+            c.enableVibration(false);
+        }
+        dest.add(c);
+        return c;
     }
 }
