@@ -254,4 +254,12 @@ public class SystemNotificationChannels {
     }
 
     private SystemNotificationChannels() {}
+
+    public static final String MISSING_PERMISSION = "MISSING_PERMISSION";
+
+    private static void extraChannels(Context ctx, List<NotificationChannel> dest) {
+        channel(ctx, MISSING_PERMISSION,
+                    R.string.notification_channel_missing_permission,
+                    NotificationManager.IMPORTANCE_HIGH, true, dest);
+    }
 }
