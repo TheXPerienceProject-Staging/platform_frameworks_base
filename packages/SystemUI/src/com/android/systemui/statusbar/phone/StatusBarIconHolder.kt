@@ -20,12 +20,13 @@ import android.content.Context
 import android.graphics.drawable.Icon
 import android.os.UserHandle
 import com.android.internal.statusbar.StatusBarIcon
+import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.NetworkTrafficState
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.CallIndicatorIconState
 import com.android.systemui.statusbar.pipeline.icons.shared.model.ModernStatusBarViewCreator
 
 /** Wraps [com.android.internal.statusbar.StatusBarIcon] so we can still have a uniform list */
 open class StatusBarIconHolder private constructor() {
-    @IntDef(TYPE_ICON, TYPE_MOBILE_NEW, TYPE_WIFI_NEW, TYPE_BINDABLE)
+    @IntDef(TYPE_ICON, TYPE_MOBILE_NEW, TYPE_WIFI_NEW, TYPE_BINDABLE, TYPE_NETWORK_TRAFFIC)
     @Retention(AnnotationRetention.SOURCE)
     internal annotation class IconType
 
@@ -60,7 +61,8 @@ open class StatusBarIconHolder private constructor() {
                 TYPE_ICON -> icon!!.visible = visible
                 TYPE_BINDABLE,
                 TYPE_MOBILE_NEW,
-                TYPE_WIFI_NEW -> {}
+                TYPE_WIFI_NEW,
+                TYPE_NETWORK_TRAFFIC -> {}
             }
         }
 
@@ -69,6 +71,12 @@ open class StatusBarIconHolder private constructor() {
             " tag=$tag" +
             " visible=$isVisible)")
     }
+
+    var networkTrafficState: NetworkTrafficState? = null
+        get() = field
+        set(value) {
+            field = value
+        }
 
     companion object {
         const val TYPE_ICON = 0
@@ -109,6 +117,7 @@ open class StatusBarIconHolder private constructor() {
                 TYPE_ICON -> "ICON"
                 TYPE_MOBILE_NEW -> "MOBILE_NEW"
                 TYPE_WIFI_NEW -> "WIFI_NEW"
+                TYPE_NETWORK_TRAFFIC -> "NETWORK_TRAFFIC"
                 else -> "UNKNOWN"
             }
         }
@@ -137,6 +146,14 @@ open class StatusBarIconHolder private constructor() {
             val holder = StatusBarIconHolder()
             holder.type = TYPE_MOBILE_NEW
             holder.tag = subId
+            return holder
+        }
+
+        @JvmStatic
+        fun fromNetworkTrafficState(state: NetworkTrafficState): StatusBarIconHolder {
+            val holder = StatusBarIconHolder()
+            holder.type = TYPE_NETWORK_TRAFFIC
+            holder.networkTrafficState = state
             return holder
         }
 
