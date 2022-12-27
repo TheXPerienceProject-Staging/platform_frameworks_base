@@ -36,6 +36,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.os.UserManager;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.service.notification.ZenModeConfig;
 import android.telecom.TelecomManager;
@@ -77,6 +79,7 @@ import com.android.systemui.statusbar.policy.RotationLockController.RotationLock
 import com.android.systemui.statusbar.policy.SensorPrivacyController;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.ZenModeController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.RingerModeTracker;
 import com.android.systemui.util.kotlin.JavaAdapter;
 import com.android.systemui.util.time.DateFormatUtil;
@@ -103,9 +106,13 @@ public class PhoneStatusBarPolicy
                 KeyguardStateController.Callback,
                 PrivacyItemController.Callback,
                 LocationController.LocationChangeCallback,
-                RecordingController.RecordingStateChangeCallback {
+                RecordingController.RecordingStateChangeCallback,
+                TunerService.Tunable {
     private static final String TAG = "PhoneStatusBarPolicy";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
+
+    private static final String NETWORK_TRAFFIC_LOCATION =
+            "system:" + Settings.System.NETWORK_TRAFFIC_LOCATION;
 
     static final int LOCATION_STATUS_ICON_ID = PrivacyType.TYPE_LOCATION.getIconId();
 
@@ -128,6 +135,7 @@ public class PhoneStatusBarPolicy
     private final String mSlotScreenRecord;
     private final String mSlotConnectedDisplay;
     private final String mSlotNfc;
+    private final String mSlotNetworkTraffic;
     private final int mDisplayId;
     private final SharedPreferences mSharedPreferences;
     private final DateFormatUtil mDateFormatUtil;
@@ -174,6 +182,10 @@ public class PhoneStatusBarPolicy
 
     private NfcAdapter mAdapter;
     private final Context mContext;
+
+    private boolean mShowNetworkTraffic;
+
+    private TunerService mTunerService;
 
     @Inject
     public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController,
@@ -252,6 +264,7 @@ public class PhoneStatusBarPolicy
         mSlotScreenRecord = resources.getString(
                 com.android.internal.R.string.status_bar_screen_record);
         mSlotNfc = resources.getString(com.android.internal.R.string.status_bar_nfc);
+        mSlotNetworkTraffic = resources.getString(com.android.internal.R.string.status_bar_network_traffic);
 
         mDisplayId = displayId;
         mSharedPreferences = sharedPreferences;
@@ -363,6 +376,11 @@ public class PhoneStatusBarPolicy
         mIconController.setIconVisibility(mSlotNfc, false);
         updateNfc();
 
+        // network traffic
+        mShowNetworkTraffic = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+            NETWORK_TRAFFIC_LOCATION, 0, UserHandle.USER_CURRENT) == 1;
+        updateNetworkTraffic();
+
         mRotationLockController.addCallback(this);
         mBluetooth.addCallback(this);
         mProvisionedController.addCallback(this);
@@ -400,6 +418,19 @@ public class PhoneStatusBarPolicy
     @Override
     public void onConsolidatedPolicyChanged(NotificationManager.Policy policy) {
         updateVolumeZen();
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case NETWORK_TRAFFIC_LOCATION:
+                mShowNetworkTraffic =
+                        TunerService.parseInteger(newValue, 0) == 1;
+                updateNetworkTraffic();
+                break;
+            default:
+                break;
+        }
     }
 
     private void updateAlarm() {
@@ -544,6 +575,11 @@ public class PhoneStatusBarPolicy
 
         mIconController.setIcon(mSlotBluetooth, iconId, contentDescription);
         mIconController.setIconVisibility(mSlotBluetooth, bluetoothVisible);
+    }
+
+    private final void updateNetworkTraffic() {
+        mIconController.setNetworkTraffic(mSlotNetworkTraffic, new NetworkTrafficState(mShowNetworkTraffic));
+        mIconController.setIconVisibility(mSlotNetworkTraffic, mShowNetworkTraffic);
     }
 
     private final void updateTTY() {
@@ -909,5 +945,18 @@ public class PhoneStatusBarPolicy
         }
 
         mIconController.setIconVisibility(mSlotConnectedDisplay, visible);
+    }
+
+    public static class NetworkTrafficState {
+        public boolean visible;
+
+        public NetworkTrafficState(boolean visible) {
+            this.visible = visible;
+        }
+
+        @Override
+        public String toString() {
+            return "NetworkTrafficState(visible=" + visible + ")";
+        }
     }
 }
