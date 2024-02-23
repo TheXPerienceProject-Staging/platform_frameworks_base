@@ -18,6 +18,8 @@ package com.android.server.policy.keyguard;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.ext.settings.DenyNewUsbSetting;
+import android.os.Binder;
 import android.os.RemoteException;
 import android.util.Slog;
 
@@ -33,6 +35,8 @@ import java.io.PrintWriter;
  */
 public class KeyguardStateMonitor extends IKeyguardStateCallback.Stub {
     private static final String TAG = "KeyguardStateMonitor";
+
+    private final Context mContext;
 
     // These cache the current state of Keyguard to improve performance and avoid deadlock. After
     // Keyguard changes its state, it always triggers a layout in window manager. Because
@@ -51,6 +55,7 @@ public class KeyguardStateMonitor extends IKeyguardStateCallback.Stub {
     private final StateCallback mCallback;
 
     public KeyguardStateMonitor(Context context, IKeyguardService service, StateCallback callback) {
+        mContext = context;
         mLockPatternUtils = new LockPatternUtils(context);
         mCurrentUserId = ActivityManager.getCurrentUser();
         mCallback = callback;
@@ -91,6 +96,23 @@ public class KeyguardStateMonitor extends IKeyguardStateCallback.Stub {
         mCallback.onShowingChanged();
 
         AutoReboot.onKeyguardShowingStateChanged(mContext, showing, userId);
+<<<<<<< HEAD
+=======
+
+        if (DenyNewUsbSetting.DYNAMIC.equals(DenyNewUsbSetting.SYS_PROP.get())) {
+            SystemProperties.set(DenyNewUsbSetting.TRANSIENT_PROP, showing ?
+                    DenyNewUsbSetting.TRANSIENT_ENABLE :
+                    DenyNewUsbSetting.TRANSIENT_DISABLE);
+        }
+
+        final long token = Binder.clearCallingIdentity();
+        try {
+            UsbPortSecurityHooks.onKeyguardShowingStateChanged(mContext, showing, userId);
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+
+>>>>>>> de73cd9d020c (add setting for USB port security state)
     }
 
     @Override // Binder interface
