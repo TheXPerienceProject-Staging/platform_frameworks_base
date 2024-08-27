@@ -175,6 +175,9 @@ public class PhoneStatusBarPolicy
     private NfcAdapter mAdapter;
     private final Context mContext;
 
+
+    private TunerService mTunerService;
+
     @Inject
     public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController,
             CommandQueue commandQueue, BroadcastDispatcher broadcastDispatcher,
@@ -196,7 +199,8 @@ public class PhoneStatusBarPolicy
             PrivacyItemController privacyItemController,
             PrivacyLogger privacyLogger,
             ConnectedDisplayInteractor connectedDisplayInteractor,
-            JavaAdapter javaAdapter
+            JavaAdapter javaAdapter,
+            TunerService tunerService
     ) {
         mContext = context;
         mIconController = iconController;
@@ -256,6 +260,8 @@ public class PhoneStatusBarPolicy
         mDisplayId = displayId;
         mSharedPreferences = sharedPreferences;
         mDateFormatUtil = dateFormatUtil;
+
+        mTunerService = tunerService;
     }
 
     /** Initialize the object after construction. */
@@ -285,6 +291,8 @@ public class PhoneStatusBarPolicy
         updateTTY();
 
         // bluetooth status
+//        mShowBluetoothBattery = Settings.System.getIntForUser(mContext.getContentResolver(),
+//            BLUETOOTH_SHOW_BATTERY, 1, UserHandle.USER_CURRENT) != 0;
         updateBluetooth();
 
         // Alarm clock
@@ -381,6 +389,9 @@ public class PhoneStatusBarPolicy
                 this::onConnectedDisplayAvailabilityChanged);
 
         mCommandQueue.addCallback(this);
+
+//        mTunerService.addTunable(this, BLUETOOTH_SHOW_BATTERY);
+        mTunerService.addTunable(this, NETWORK_TRAFFIC_LOCATION);
 
         // Get initial user setup state
         onUserSetupChanged();
