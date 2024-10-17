@@ -96,8 +96,6 @@ public class KeyguardStateMonitor extends IKeyguardStateCallback.Stub {
         mCallback.onShowingChanged();
 
         AutoReboot.onKeyguardShowingStateChanged(mContext, showing, userId);
-<<<<<<< HEAD
-=======
 
         if (DenyNewUsbSetting.DYNAMIC.equals(DenyNewUsbSetting.SYS_PROP.get())) {
             SystemProperties.set(DenyNewUsbSetting.TRANSIENT_PROP, showing ?
@@ -112,7 +110,6 @@ public class KeyguardStateMonitor extends IKeyguardStateCallback.Stub {
             Binder.restoreCallingIdentity(token);
         }
 
->>>>>>> de73cd9d020c (add setting for USB port security state)
     }
 
     @Override // Binder interface
