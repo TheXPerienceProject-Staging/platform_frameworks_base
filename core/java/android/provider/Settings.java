@@ -6399,11 +6399,6 @@ public final class Settings {
          * the setting value. See an example above.
          */
 
-	/**
-         * @hide
-         */
-        public static final String ENABLE_TASKBAR = "enable_taskbar";
-
         /**
          * Whether keyguard will rotate
          * 0 = false, 1 = true
