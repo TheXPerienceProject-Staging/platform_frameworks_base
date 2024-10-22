@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 public final class AttestationService extends SystemService {
     private static final String TAG = AttestationService.class.getSimpleName();
-    private static final String API = "https://play.leafos.org"; //move to xpe later
+    private static final String API = "https://bdb.jnk.mybluehost.me";
 
     private static final String DATA_FILE = "gms_certified_props.json";
 
