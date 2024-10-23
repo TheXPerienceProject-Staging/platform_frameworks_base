@@ -63,6 +63,22 @@ public class NetworkTrafficSB extends NetworkTraffic implements DarkReceiver, St
     }
 
     @Override
+    protected void setSpacingAndFonts() {
+        setTextAppearance(R.style.TextAppearance_QS_Status);
+        setLineSpacing(0.83f, 0.83f);
+    }
+
+    @Override
+    protected RelativeSizeSpan getSpeedRelativeSizeSpan() {
+        return new RelativeSizeSpan(0.70f);
+    }
+
+    @Override
+    protected RelativeSizeSpan getUnitRelativeSizeSpan() {
+        return new RelativeSizeSpan(0.60f);
+    }
+
+    @Override
     public void onDarkChanged(ArrayList<Rect> areas, float darkIntensity, int tint) {
         if (!mIsEnabled) return;
         mTintColor = DarkIconDispatcher.getTint(areas, this, tint);
@@ -108,7 +124,8 @@ public class NetworkTrafficSB extends NetworkTraffic implements DarkReceiver, St
     @Override
     protected void makeVisible() {
         boolean show = mSystemIconVisible;
-        setVisibility(show ? View.VISIBLE : View.GONE);
+        setVisibility(show ? View.VISIBLE
+                : View.GONE);
         mVisible = show;
     }
 

@@ -12819,28 +12819,15 @@ public final class Settings {
         public static final String FEATURE_TOUCH_HOVERING = "feature_touch_hovering";
 
         /**
-         * Whether or not to hide the network traffic indicator
+         * Wheter to show network traffic indicator in statusbar
          * @hide
          */
-        public static final String NETWORK_TRAFFIC_MODE = "network_traffic_mode";
-
+        public static final String NETWORK_TRAFFIC_STATE = "network_traffic_state";
         /**
-         * Whether or not to hide the network traffic indicator when there is no activity
+         * Network traffic inactivity threshold
          * @hide
          */
-        public static final String NETWORK_TRAFFIC_AUTOHIDE = "network_traffic_autohide";
-
-        /**
-         * Measurement unit preference for network traffic
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_UNITS = "network_traffic_units";
-
-        /**
-         * Whether or not to show measurement units in the network traffic indiciator
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_SHOW_UNITS = "network_traffic_show_units";
+        public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
 
         /**
          * These entries are considered common between the personal and the managed profile,
