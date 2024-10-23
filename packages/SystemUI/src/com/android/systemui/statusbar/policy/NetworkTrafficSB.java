@@ -4,7 +4,6 @@ import static com.android.systemui.statusbar.StatusBarIconView.STATE_DOT;
 import static com.android.systemui.statusbar.StatusBarIconView.STATE_HIDDEN;
 import static com.android.systemui.statusbar.StatusBarIconView.STATE_ICON;
 
-import android.app.KeyguardManager;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -108,9 +107,7 @@ public class NetworkTrafficSB extends NetworkTraffic implements DarkReceiver, St
 
     @Override
     protected void makeVisible() {
-        KeyguardManager keyguardManager = (KeyguardManager) getContext().getSystemService(Context.KEYGUARD_SERVICE);
-        boolean isDeviceLocked = keyguardManager.isKeyguardLocked();
-        boolean show = mSystemIconVisible && !isDeviceLocked;
+        boolean show = mSystemIconVisible;
         setVisibility(show ? View.VISIBLE : View.GONE);
         mVisible = show;
     }
@@ -128,9 +125,7 @@ public class NetworkTrafficSB extends NetworkTraffic implements DarkReceiver, St
     }
 
     private void maybeRestoreVisibility() {
-        KeyguardManager keyguardManager = (KeyguardManager) getContext().getSystemService(Context.KEYGUARD_SERVICE);
-        boolean isDeviceLocked = keyguardManager.isKeyguardLocked();
-        if (!mVisible && mIsEnabled && mSystemIconVisible && !isDeviceLocked
+        if (!mVisible && mIsEnabled && mSystemIconVisible
            && restoreViewQuickly()) {
           setVisibility(View.VISIBLE);
           mVisible = true;
