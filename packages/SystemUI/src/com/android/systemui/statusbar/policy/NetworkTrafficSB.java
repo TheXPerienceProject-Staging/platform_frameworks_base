@@ -103,6 +103,7 @@ public class NetworkTrafficSB extends NetworkTraffic implements DarkReceiver, St
                 mSystemIconVisible = false;
                 break;
         }
+        update();
     }
 
     @Override
