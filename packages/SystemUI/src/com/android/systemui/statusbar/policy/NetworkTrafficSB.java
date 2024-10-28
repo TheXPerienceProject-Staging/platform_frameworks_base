@@ -65,7 +65,9 @@ public class NetworkTrafficSB extends NetworkTraffic implements DarkReceiver, St
 
     @Override
     public void onDarkChanged(ArrayList<Rect> areas, float darkIntensity, int tint) {
+        if (!mIsEnabled) return;
         mTintColor = DarkIconDispatcher.getTint(areas, this, tint);
+        setTextColor(mTintColor);
         updateTrafficDrawable();
     }
 
@@ -115,6 +117,7 @@ public class NetworkTrafficSB extends NetworkTraffic implements DarkReceiver, St
     @Override
     public void setStaticDrawableColor(int color) {
         mTintColor = color;
+        setTextColor(mTintColor);
         updateTrafficDrawable();
     }
 
