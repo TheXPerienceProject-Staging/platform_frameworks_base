@@ -90,8 +90,6 @@ import com.android.systemui.util.settings.SystemSettings;
 import com.google.ux.material.libmonet.dynamiccolor.DynamicColor;
 import com.google.ux.material.libmonet.dynamiccolor.MaterialDynamicColors;
 
-import lineageos.providers.LineageSettings;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

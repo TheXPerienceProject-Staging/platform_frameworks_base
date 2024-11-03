@@ -79,8 +79,7 @@ public class BatteryMeterViewController extends ViewController<BatteryMeterView>
                     int batteryStyle = TunerService.parseInteger(newValue,
                             BatteryMeterView.BATTERY_STYLE_PORTRAIT);
                     mView.setBatteryStyle(batteryStyle);
-                    mView.setVisibility(!mBatteryController.isPresent() || 
-                        batteryStyle == BatteryMeterView.BATTERY_STYLE_HIDDEN ? View.GONE : View.VISIBLE);
+                    mView.setVisibility(batteryStyle == BatteryMeterView.BATTERY_STYLE_HIDDEN ? View.GONE : View.VISIBLE);
                     break;
                 case STATUS_BAR_SHOW_BATTERY_PERCENT:
                     int showBatteryPercent =
@@ -125,14 +124,6 @@ public class BatteryMeterViewController extends ViewController<BatteryMeterView>
                     if (mFeatureFlags.isEnabled(Flags.INCOMPATIBLE_CHARGING_BATTERY_ICON)) {
                         mView.onIsIncompatibleChargingChanged(isIncompatibleCharging);
                     }
-                }
-
-                @Override
-                public void onBatteryPresentChanged(boolean batteryPresent) {
-                    mView.setBatteryPresence(batteryPresent);
-                    mView.setVisibility(!batteryPresent ||
-                        mView.getBatteryStyle() == BatteryMeterView.BATTERY_STYLE_HIDDEN ?
-                        View.GONE : View.VISIBLE);
                 }
 
                 @Override

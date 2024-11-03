@@ -116,7 +116,10 @@ public class SystemSettings {
                 Settings.System.NOTIFICATION_COOLDOWN_ENABLED,
                 Settings.System.NOTIFICATION_COOLDOWN_ALL,
                 Settings.System.NOTIFICATION_COOLDOWN_VIBRATE_UNLOCKED,
-                Settings.System.LOCKSCREEN_ROTATION
+                Settings.System.LOCKSCREEN_ROTATION,
+		Settings.System.STATUS_BAR_BATTERY_STYLE,
+		Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT,
+		Settings.System.STATUS_BAR_BATTERY_TEXT_CHARGING
         ));
         if (Flags.backUpSmoothDisplayAndForcePeakRefreshRate()) {
             settings.add(Settings.System.PEAK_REFRESH_RATE);
