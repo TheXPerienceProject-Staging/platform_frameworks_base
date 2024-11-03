@@ -767,6 +767,11 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
                 Math.round(fullBatteryIconHeight));
         scaledLayoutParams.setMargins(0, marginTop, 0, marginBottom);
 
+<<<<<<< HEAD
+        mDrawable.setDisplayShield(displayShield);
+        mBatteryIconView.setLayoutParams(scaledLayoutParams);
+        mBatteryIconView.invalidateDrawable(mDrawable);
+=======
         if (mThemedDrawable != null) {
             mThemedDrawable.setDisplayShield(displayShield);
             mBatteryIconView.setLayoutParams(scaledLayoutParams);
@@ -802,6 +807,7 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
         }
         updateShowPercent();
         updatePercentText();
+>>>>>>> 761c30947729 (SystemUI: Bring back good ol' circle battery style)
     }
 
     @Override
